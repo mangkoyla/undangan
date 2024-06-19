@@ -3,6 +3,7 @@ import { user } from './user.js';
 import { theme } from './theme.js';
 import { storage } from './storage.js';
 import { comment } from './comment.js';
+import { bootstrap } from './bootstrap.js';
 import { request, HTTP_POST } from './request.js';
 
 export const session = (() => {
@@ -23,11 +24,16 @@ export const session = (() => {
     const login = async (button) => {
 
         const btn = util.disableButton(button, '<div class="spinner-border spinner-border-sm me-1" role="status"></div>Loading..');
+        const formEmail = document.getElementById('loginEmail');
+        const formPassword = document.getElementById('loginPassword');
+
+        formEmail.disabled = true;
+        formPassword.disabled = true;
 
         const res = await request(HTTP_POST, '/api/session')
             .body({
-                email: document.getElementById('loginEmail').value,
-                password: document.getElementById('loginPassword').value
+                email: formEmail.value,
+                password: formPassword.value
             })
             .then((res) => {
                 if (res.code === 200) {
@@ -45,6 +51,8 @@ export const session = (() => {
         }
 
         btn.restore();
+        formEmail.disabled = false;
+        formPassword.disabled = false;
     };
 
     const logout = () => {
